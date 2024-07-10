@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { notFound } from "next/navigation";
 
 import classes from "./page.module.css";
 import { getMeal } from "@/lib/meals";
@@ -6,13 +7,22 @@ import { getMeal } from "@/lib/meals";
 export default function SlugMealPage({ params }) {
   const meal = getMeal(params.mealSlug);
 
+  if (!meal) {
+    notFound();
+  }
+
   const instructions = meal.instructions.replace(/\n/g, "<br />");
 
   return (
     <>
       <header className={classes.header}>
         <div className={classes.image}>
-          <Image src={meal.image} alt="" fill />
+          <Image
+            src={meal.image}
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         </div>
         <div className={classes.headerText}>
           <h1>{meal.title}</h1>
